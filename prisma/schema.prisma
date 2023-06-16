@@ -61,8 +61,8 @@ model Campeonato {
   id          Int          @id @default(autoincrement())
   nombre      String       @db.VarChar(200)
   categoriaId Int
-  fechaInicio DateTime     @db.Timestamptz()
-  fechaFin    DateTime     @db.Timestamptz()
+  fechaFin    String       @db.VarChar(100)
+  fechaInicio String       @db.VarChar(100)
   categoria   Categoria    @relation(fields: [categoriaId], references: [id])
   equipos     Equipo[]
   posiciones  Posiciones[]
@@ -86,7 +86,7 @@ model Equipo {
   id                Int          @id @default(autoincrement())
   nombre            String       @db.VarChar(200)
   direccion         String       @db.Text
-  fechaFundacion    DateTime     @db.Timestamptz()
+  fechaFundacion    String       @db.VarChar(100)
   escudo            String       @db.Text
   colores           Color[]
   campeonatos       Campeonato[]
@@ -120,7 +120,7 @@ model Cronograma {
   id                Int        @id @default(autoincrement())
   equipoLocalId     Int
   equipoVisitanteId Int
-  fechaEncuentro    DateTime   @db.Timestamptz()
+  fechaEncuentro    String     @db.VarChar(100)
   canchaId          Int
   resultadoId       Int        @unique
   campeonatoId      Int

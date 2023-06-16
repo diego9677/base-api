@@ -4,6 +4,9 @@ import morgan from "morgan";
 import cors from "cors";
 import { loginRouter } from "./routes/login.route";
 import { expressjwt } from "express-jwt";
+import categoriasRouter from "./routes/categorias";
+import equiposRouter from "./routes/equipos";
+import campeonatoRouter from "./routes/campeonato";
 
 const secretKey = "secret_key";
 
@@ -16,13 +19,14 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cors());
 
 // authentication
-app.use(
-  expressjwt({ secret: secretKey, credentialsRequired: true, requestProperty: 'user', algorithms: ['HS256'] })
-    .unless({
-      path: [
-        '/api/login']
-    })
-);
+// app.use(
+//   expressjwt({ secret: secretKey, credentialsRequired: true, requestProperty: 'user', algorithms: ['HS256'] })
+//     .unless({
+//       path: [
+//         '/api/login',
+//       ]
+//     })
+// );
 
 // error habdlers
 app.use((err: any, req: Request, res: Response, next: NextFunction) => {
@@ -43,6 +47,9 @@ app.use((err: any, req: Request, res: Response, next: NextFunction) => {
 
 // routes
 app.use("/api/login", loginRouter);
+app.use("/api/categoria", categoriasRouter);
+app.use("/api/equipo", equiposRouter);
+app.use("/api/campeonato", campeonatoRouter);
 
 app.listen(3000);
 console.log("server running in http://localhost:3000");

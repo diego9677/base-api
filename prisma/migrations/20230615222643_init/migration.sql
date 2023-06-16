@@ -58,8 +58,8 @@ CREATE TABLE "Campeonato" (
     "id" SERIAL NOT NULL,
     "nombre" VARCHAR(200) NOT NULL,
     "categoriaId" INTEGER NOT NULL,
-    "fecha_inicio" TIMESTAMPTZ NOT NULL,
-    "fecha_fin" TIMESTAMPTZ NOT NULL,
+    "fechaFin" VARCHAR(100) NOT NULL,
+    "fechaInicio" VARCHAR(100) NOT NULL,
 
     CONSTRAINT "Campeonato_pkey" PRIMARY KEY ("id")
 );
@@ -87,7 +87,7 @@ CREATE TABLE "Equipo" (
     "id" SERIAL NOT NULL,
     "nombre" VARCHAR(200) NOT NULL,
     "direccion" TEXT NOT NULL,
-    "fecha_fundacion" TIMESTAMPTZ NOT NULL,
+    "fechaFundacion" VARCHAR(100) NOT NULL,
     "escudo" TEXT NOT NULL,
 
     CONSTRAINT "Equipo_pkey" PRIMARY KEY ("id")
@@ -122,13 +122,19 @@ CREATE TABLE "Cronograma" (
     "id" SERIAL NOT NULL,
     "equipoLocalId" INTEGER NOT NULL,
     "equipoVisitanteId" INTEGER NOT NULL,
-    "fechaEncuentro" TIMESTAMPTZ NOT NULL,
+    "fechaEncuentro" VARCHAR(100) NOT NULL,
     "canchaId" INTEGER NOT NULL,
     "resultadoId" INTEGER NOT NULL,
     "campeonatoId" INTEGER NOT NULL,
     "arbiroId" INTEGER NOT NULL,
 
     CONSTRAINT "Cronograma_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "_CampeonatoToEquipo" (
+    "A" INTEGER NOT NULL,
+    "B" INTEGER NOT NULL
 );
 
 -- CreateIndex
@@ -145,6 +151,12 @@ CREATE UNIQUE INDEX "Jugador_personaId_key" ON "Jugador"("personaId");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "Cronograma_resultadoId_key" ON "Cronograma"("resultadoId");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "_CampeonatoToEquipo_AB_unique" ON "_CampeonatoToEquipo"("A", "B");
+
+-- CreateIndex
+CREATE INDEX "_CampeonatoToEquipo_B_index" ON "_CampeonatoToEquipo"("B");
 
 -- AddForeignKey
 ALTER TABLE "Arbitro" ADD CONSTRAINT "Arbitro_personaId_fkey" FOREIGN KEY ("personaId") REFERENCES "Persona"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
@@ -184,3 +196,9 @@ ALTER TABLE "Cronograma" ADD CONSTRAINT "Cronograma_resultadoId_fkey" FOREIGN KE
 
 -- AddForeignKey
 ALTER TABLE "Cronograma" ADD CONSTRAINT "Cronograma_arbiroId_fkey" FOREIGN KEY ("arbiroId") REFERENCES "Arbitro"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "_CampeonatoToEquipo" ADD CONSTRAINT "_CampeonatoToEquipo_A_fkey" FOREIGN KEY ("A") REFERENCES "Campeonato"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "_CampeonatoToEquipo" ADD CONSTRAINT "_CampeonatoToEquipo_B_fkey" FOREIGN KEY ("B") REFERENCES "Equipo"("id") ON DELETE CASCADE ON UPDATE CASCADE;
