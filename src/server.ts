@@ -7,6 +7,7 @@ import { expressjwt } from "express-jwt";
 import categoriasRouter from "./routes/categorias";
 import equiposRouter from "./routes/equipos";
 import campeonatoRouter from "./routes/campeonato";
+import posicionesRouter from "./routes/posiciones";
 
 const secretKey = "secret_key";
 
@@ -50,6 +51,7 @@ app.use("/api/login", loginRouter);
 app.use("/api/categoria", categoriasRouter);
 app.use("/api/equipo", equiposRouter);
 app.use("/api/campeonato", campeonatoRouter);
+app.use("/api/posiciones", posicionesRouter);
 
 app.listen(3000);
 console.log("server running in http://localhost:3000");
