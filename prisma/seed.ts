@@ -18,6 +18,25 @@ const EQUIPOS = [
   { nombre: "Villa Fatima", direccion: "Av. Siempre viva", fechaFundacion: "1999-12-31", color: { nombre: "Gris" } },
 ];
 
+const CANCHAS = [
+  { nombre: "Cancha Brannif", direccion: "Av. Siempre Viva" },
+  { nombre: "Cancha Santa Rosa", direccion: "Av. Siempre Viva" },
+  { nombre: "Cancha Villa Warnes", direccion: "Av. Siempre Viva" },
+  { nombre: "Cancha Morita", direccion: "Av. Siempre Viva" },
+  { nombre: "Cancha El Carmen", direccion: "Av. Siempre Viva" },
+  { nombre: "Cancha Los Lotes", direccion: "Av. Siempre Viva" },
+  { nombre: "Cancha Plan 3000", direccion: "Av. Siempre Viva" },
+  { nombre: "Cancha Tajibos", direccion: "Av. Siempre Viva" },
+  { nombre: "Cancha Villa Fatima", direccion: "Av. Siempre Viva" },
+];
+
+const ARBITROS = [
+  { persona: { ci: "12345", nombres: "Pepe", apellidos: "Perez" } },
+  { persona: { ci: "11231", nombres: "Juan", apellidos: "Martinez" } },
+  { persona: { ci: "21334", nombres: "Ivan", apellidos: "Trolazo" } },
+  { persona: { ci: "31273", nombres: "Ruben", apellidos: "Deleva" } },
+];
+
 
 async function main() {
   const prisma = new PrismaClient();
@@ -28,6 +47,29 @@ async function main() {
 
     const categoriesCount = await prisma.categoria.count();
     const equiposCount = await prisma.equipo.count();
+    const canchasCount = await prisma.cancha.count();
+    const arbitrosCount = await prisma.arbitro.count();
+
+    if (arbitrosCount === 0) {
+      for (let i = 0; i < ARBITROS.length; i++) {
+        const { nombres, apellidos, ci } = ARBITROS[i].persona;
+        await prisma.arbitro.create({
+          data: {
+            persona: {
+              create: {
+                ci,
+                nombres,
+                apellidos
+              }
+            }
+          }
+        });
+      }
+    }
+
+    if (canchasCount === 0) {
+      await prisma.cancha.createMany({ data: CANCHAS });
+    }
 
     if (categoriesCount === 0) {
       await prisma.categoria.createMany({ data: CATEGORIAS });

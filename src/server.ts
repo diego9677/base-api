@@ -3,11 +3,15 @@ import express, { NextFunction, Request, Response } from "express";
 import morgan from "morgan";
 import cors from "cors";
 import { loginRouter } from "./routes/login.route";
-import { expressjwt } from "express-jwt";
+// import { expressjwt } from "express-jwt";
 import categoriasRouter from "./routes/categorias";
 import equiposRouter from "./routes/equipos";
 import campeonatoRouter from "./routes/campeonato";
 import posicionesRouter from "./routes/posiciones";
+import cronogramaRouter from "./routes/cronograma";
+import arbitroRouter from "./routes/arbitros";
+import canchaRouter from "./routes/cancha";
+import resultadoRouter from "./routes/resultado";
 
 const secretKey = "secret_key";
 
@@ -52,6 +56,10 @@ app.use("/api/categoria", categoriasRouter);
 app.use("/api/equipo", equiposRouter);
 app.use("/api/campeonato", campeonatoRouter);
 app.use("/api/posiciones", posicionesRouter);
+app.use("/api/cronograma", cronogramaRouter);
+app.use("/api/arbitro", arbitroRouter);
+app.use("/api/cancha", canchaRouter);
+app.use("/api/resultado", resultadoRouter);
 
 app.listen(3000);
 console.log("server running in http://localhost:3000");

@@ -113,6 +113,7 @@ CREATE TABLE "Resultado" (
     "tarjetasRojas" INTEGER NOT NULL DEFAULT 0,
     "golesLocal" INTEGER NOT NULL DEFAULT 0,
     "golesVisitante" INTEGER NOT NULL DEFAULT 0,
+    "cronogramaId" INTEGER,
 
     CONSTRAINT "Resultado_pkey" PRIMARY KEY ("id")
 );
@@ -120,13 +121,13 @@ CREATE TABLE "Resultado" (
 -- CreateTable
 CREATE TABLE "Cronograma" (
     "id" SERIAL NOT NULL,
+    "campeonatoId" INTEGER NOT NULL,
     "equipoLocalId" INTEGER NOT NULL,
     "equipoVisitanteId" INTEGER NOT NULL,
-    "fechaEncuentro" VARCHAR(100) NOT NULL,
-    "canchaId" INTEGER NOT NULL,
-    "resultadoId" INTEGER NOT NULL,
-    "campeonatoId" INTEGER NOT NULL,
-    "arbiroId" INTEGER NOT NULL,
+    "fechaEncuentro" VARCHAR(100),
+    "resultadoId" INTEGER,
+    "canchaId" INTEGER,
+    "arbitroId" INTEGER,
 
     CONSTRAINT "Cronograma_pkey" PRIMARY KEY ("id")
 );
@@ -150,7 +151,7 @@ CREATE UNIQUE INDEX "Presidente_personaId_key" ON "Presidente"("personaId");
 CREATE UNIQUE INDEX "Jugador_personaId_key" ON "Jugador"("personaId");
 
 -- CreateIndex
-CREATE UNIQUE INDEX "Cronograma_resultadoId_key" ON "Cronograma"("resultadoId");
+CREATE UNIQUE INDEX "Resultado_cronogramaId_key" ON "Resultado"("cronogramaId");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "_CampeonatoToEquipo_AB_unique" ON "_CampeonatoToEquipo"("A", "B");
@@ -183,6 +184,9 @@ ALTER TABLE "Posiciones" ADD CONSTRAINT "Posiciones_equipoId_fkey" FOREIGN KEY (
 ALTER TABLE "Posiciones" ADD CONSTRAINT "Posiciones_campeonatoId_fkey" FOREIGN KEY ("campeonatoId") REFERENCES "Campeonato"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
+ALTER TABLE "Resultado" ADD CONSTRAINT "Resultado_cronogramaId_fkey" FOREIGN KEY ("cronogramaId") REFERENCES "Cronograma"("id") ON DELETE SET NULL ON UPDATE CASCADE;
+
+-- AddForeignKey
 ALTER TABLE "Cronograma" ADD CONSTRAINT "Cronograma_equipoLocalId_fkey" FOREIGN KEY ("equipoLocalId") REFERENCES "Equipo"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
@@ -192,10 +196,10 @@ ALTER TABLE "Cronograma" ADD CONSTRAINT "Cronograma_equipoVisitanteId_fkey" FORE
 ALTER TABLE "Cronograma" ADD CONSTRAINT "Cronograma_campeonatoId_fkey" FOREIGN KEY ("campeonatoId") REFERENCES "Campeonato"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "Cronograma" ADD CONSTRAINT "Cronograma_resultadoId_fkey" FOREIGN KEY ("resultadoId") REFERENCES "Resultado"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "Cronograma" ADD CONSTRAINT "Cronograma_arbitroId_fkey" FOREIGN KEY ("arbitroId") REFERENCES "Arbitro"("id") ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "Cronograma" ADD CONSTRAINT "Cronograma_arbiroId_fkey" FOREIGN KEY ("arbiroId") REFERENCES "Arbitro"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "Cronograma" ADD CONSTRAINT "Cronograma_canchaId_fkey" FOREIGN KEY ("canchaId") REFERENCES "Cancha"("id") ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "_CampeonatoToEquipo" ADD CONSTRAINT "_CampeonatoToEquipo_A_fkey" FOREIGN KEY ("A") REFERENCES "Campeonato"("id") ON DELETE CASCADE ON UPDATE CASCADE;

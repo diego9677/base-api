@@ -70,9 +70,10 @@ model Campeonato {
 }
 
 model Cancha {
-  id        Int    @id @default(autoincrement())
-  nombre    String @db.VarChar(200)
-  direccion String @db.Text
+  id         Int          @id @default(autoincrement())
+  nombre     String       @db.VarChar(200)
+  direccion  String       @db.Text
+  cronograma Cronograma[]
 }
 
 model Color {
@@ -113,21 +114,23 @@ model Resultado {
   tarjetasRojas     Int         @default(0)
   golesLocal        Int         @default(0)
   golesVisitante    Int         @default(0)
-  cronograma        Cronograma?
+  cronogramaId      Int?        @unique
+  cronograma        Cronograma? @relation(fields: [cronogramaId], references: [id])
 }
 
 model Cronograma {
   id                Int        @id @default(autoincrement())
+  campeonatoId      Int
   equipoLocalId     Int
   equipoVisitanteId Int
-  fechaEncuentro    String     @db.VarChar(100)
-  canchaId          Int
-  resultadoId       Int        @unique
-  campeonatoId      Int
-  arbiroId          Int
+  fechaEncuentro    String?    @db.VarChar(100)
+  resultadoId       Int?
+  canchaId          Int?
+  arbitroId         Int?
   equipoLocal       Equipo     @relation(name: "PartidosLocal", fields: [equipoLocalId], references: [id])
   equipoVisitante   Equipo     @relation(name: "PartidosVisitante", fields: [equipoVisitanteId], references: [id])
   campeonato        Campeonato @relation(fields: [campeonatoId], references: [id])
-  resultado         Resultado? @relation(fields: [resultadoId], references: [id])
-  arbitro           Arbitro    @relation(fields: [arbiroId], references: [id])
+  arbitro           Arbitro?   @relation(fields: [arbitroId], references: [id])
+  cancha            Cancha?    @relation(fields: [canchaId], references: [id])
+  resultado         Resultado?
 }
